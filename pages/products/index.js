@@ -25,7 +25,6 @@ const Products = () => {
           );
         }
       } catch (error) {
-        console.log(error);
         alert(error.message);
       }
       setShouldReload(false);
@@ -39,7 +38,7 @@ const Products = () => {
     try {
       const response = await fetch(`/api/products/${id}`, { method: "DELETE" });
       if (response.ok) {
-        alert("Product deleted!");
+        console.log("Product deleted!");
       } else {
         throw new Error(`Fetch fehlgeschlagen mit Status: ${response.status}`);
       }
