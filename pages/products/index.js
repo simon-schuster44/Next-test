@@ -80,8 +80,10 @@ const Products = () => {
           onChange={(event) => {
             if (event.target.value === "all") {
               setCategoryFilter(null);
+              setShouldReload(true);
             } else {
               setCategoryFilter(event.target.value);
+              setShouldReload(true);
             }
           }}
         >
