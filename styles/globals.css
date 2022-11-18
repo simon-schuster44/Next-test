@@ -21,6 +21,41 @@ a {
   }
   body {
     color: white;
-    background: black;
+    background: rgb(40, 37, 37);
   }
+}
+
+fieldset {
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+  box-shadow: 2px 2px 8px black;
+}
+h1 {
+  text-align: center;
+}
+
+p {
+  text-align: center;
+}
+li {
+  width: 80%;
+  margin: 5px auto;
+  max-width: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+}
+li::before {
+  content: "Click for details!";
+  opacity: 0;
+  transition: 0.5s;
+  width: 200px;
+  position: absolute;
+  left: -150px;
+  z-index: -1;
+}
+li:hover::before {
+  opacity: 1;
 }

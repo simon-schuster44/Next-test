@@ -2,10 +2,12 @@ import Head from "next/head";
 import Link from "next/link";
 import styles from "../../styles/ProductDashboard.module.css";
 import { useState, useEffect } from "react";
+import { RESPONSE_LIMIT_DEFAULT } from "next/dist/server/api-utils";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
   const [categoryFilter, setCategoryFilter] = useState(null); //"Food", "Technology"
+  const [shouldReload, setShouldReload] = useState(true);
 
   useEffect(() => {
     const getProducts = async () => {
@@ -26,9 +28,43 @@ const Products = () => {
         console.log(error);
         alert(error.message);
       }
+      setShouldReload(false);
     };
-    getProducts();
-  }, [categoryFilter]);
+    if (shouldReload) {
+      getProducts();
+    }
+  }, [categoryFilter, shouldReload]);
+
+  async function handleDelete(id) {
+    try {
+      const response = await fetch(`/api/products/${id}`, { method: "DELETE" });
+      if (response.ok) {
+        alert("Product deleted!");
+      } else {
+        throw new Error(`Fetch fehlgeschlagen mit Status: ${response.status}`);
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+    setShouldReload(true);
+  }
+
+  async function handleFormSubmit(event) {
+    event.preventDefault();
+    const data = Object.fromEntries(new FormData(event.target));
+    try {
+      const response = await fetch("/api/products", {
+        body: JSON.stringify(data),
+        headers: { "Content-Type": "application/json" },
+        method: "POST",
+      });
+      alert("Product added!");
+    } catch (error) {
+      alert(error.message);
+    }
+    event.target.reset();
+    setShouldReload(true);
+  }
 
   return (
     <>
@@ -39,6 +75,7 @@ const Products = () => {
       </Head>
       <div>
         <h1 className="test">Products Dashboard</h1>
+        <h4>Choose a category!</h4>
         <select
           onChange={(event) => {
             if (event.target.value === "all") {
@@ -58,10 +95,23 @@ const Products = () => {
             return (
               <li key={product._id}>
                 <Link href={`/products/${product._id}`}>{product.name}</Link>
+                <button onClick={() => handleDelete(product._id)}>❌</button>
               </li>
             );
           })}
         </ul>
+        <form onSubmit={(event) => handleFormSubmit(event)}>
+          <fieldset>
+            <legend>Neues Produkt hinzufügen:</legend>
+            <label htmlFor="name">Name:</label>
+            <input type="text" id="name" name="name" />
+            <label htmlFor="category">Kategorie:</label>
+            <input type="text" id="category" name="category" />
+            <label htmlFor="detail">Details:</label>
+            <textarea id="detail" name="detail" cols="20" rows="5" />
+            <button type="submit">Absenden</button>
+          </fieldset>
+        </form>
       </div>
     </>
   );

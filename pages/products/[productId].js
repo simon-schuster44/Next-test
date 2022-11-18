@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import Head from "next/head";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 const ProductDetail = () => {
   const [product, setProduct] = useState(null);
@@ -21,13 +22,10 @@ const ProductDetail = () => {
         alert(error);
       }
     };
-    console.log("productId", productId);
     if (productId) {
       getProduct();
     }
   }, [productId]);
-
-  console.log(router.query);
 
   return (
     <>
@@ -45,6 +43,7 @@ const ProductDetail = () => {
       ) : (
         <p>Loading...</p>
       )}
+      <Link href="/products">Back</Link>
     </>
   );
 };

@@ -6,7 +6,7 @@ const Layout = ({ children }) => {
       <StyledHeading>Navigation</StyledHeading>
       {children}
       <footer>
-        <p>Footer</p>
+        <p>Designed with ☕️ by B4CKSL4SH</p>
       </footer>
     </>
   );
