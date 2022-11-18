@@ -42,6 +42,7 @@ const ProductDetail = () => {
         </>
       ) : (
         <p>Loading...</p>
+        //Ladebalken
       )}
       <Link href="/products">Back</Link>
     </>
